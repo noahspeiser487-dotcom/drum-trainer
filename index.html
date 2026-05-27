@@ -10,6 +10,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
 <style>
 /* ─── RESET & BASE ─── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -249,6 +251,41 @@ nav .container{
 .filter-bar button:hover{color:#d0d0d8;border-color:#2a2a3a}
 .filter-bar button.active{color:#ffffff;background:#0066ff;border-color:#0066ff}
 
+/* ─── PDF VIEWER (pdf.js) ─── */
+.pdf-overlay{
+  display:none;position:fixed;inset:0;
+  background:#08080c;z-index:200;
+  flex-direction:column;
+}
+.pdf-overlay.open{display:flex}
+.pdf-nav{
+  display:flex;align-items:center;justify-content:center;gap:1rem;
+  padding:.6rem 1rem;
+  background:#0c0c14;border-bottom:1px solid #1e1e28;
+  flex-shrink:0;
+}
+.pdf-nav button{
+  background:#1e1e28;border:none;color:#808090;
+  padding:.3rem .7rem;font-family:'Inter',system-ui,sans-serif;
+  font-size:.75rem;font-weight:500;border-radius:6px;
+  cursor:pointer;transition:all .2s;
+}
+.pdf-nav button:hover{background:#2a2a3a;color:#f0f0f5}
+.pdf-nav .page-label{color:#606070;font-size:.75rem;min-width:5rem;text-align:center}
+.pdf-nav .pdf-title{color:#d0d0d8;font-size:.8rem;font-weight:500;flex:1;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:0 1rem}
+.pdf-nav .close-btn{
+  background:transparent;border:none;color:#808090;
+  font-size:1.3rem;cursor:pointer;padding:.2rem .5rem;
+  transition:color .2s;font-family:'Inter',system-ui,sans-serif;
+}
+.pdf-nav .close-btn:hover{color:#f87171}
+.pdf-canvas-wrap{
+  flex:1;overflow:auto;display:flex;
+  justify-content:center;align-items:flex-start;
+  padding:1rem;
+}
+.pdf-canvas-wrap canvas{max-width:100%;box-shadow:0 2px 12px rgba(0,0,0,.5)}
+
 /* ─── PROGRESS BAR ─── */
 .progress-bar{height:4px;background:#1e1e28;border-radius:2px;margin:.5rem 0;overflow:hidden}
 .progress-bar .fill{height:100%;background:#0066ff;border-radius:2px;transition:width .4s ease;width:0%}
@@ -266,13 +303,11 @@ nav .container{
 }
 
 /* ─── OVERRIDES for JS inline styles ─── */
-/* plan view inline colors */
 .day-card [style*="color:#555"]{color:#606070 !important}
 .day-card [style*="color:#00ff41"]{color:#0066ff !important}
 .day-card [style*="border:1px solid #00ff41"]{border-color:#0066ff !important;background:#0066ff !important}
 .day-card [style*="background:transparent"]{background:transparent !important}
 #workout-container [style*="color:#555"]{color:#606070 !important}
-/* checkbox in plan overrides */
 .day-card [style*="font-size:.5rem"]{font-size:.55rem !important;line-height:1 !important}
 
 /* ─── SCROLLBAR ─── */
@@ -291,7 +326,7 @@ nav .container{
   .timer-display{font-size:2.4rem}
   .stat-row{flex-direction:column}
   .container{padding:.85rem 1rem}
-  .pdf-viewer-box{width:100vw;height:100vh;border-radius:0}
+  .pdf-nav .pdf-title{font-size:.7rem;margin:0 .5rem}
 }
 </style>
 </head>
@@ -405,6 +440,20 @@ nav .container{
 </section>
 
 </div><!-- /container -->
+
+<!-- ==================== PDF.JS VIEWER ==================== -->
+<div class="pdf-overlay" id="pdf-overlay">
+  <div class="pdf-nav">
+    <button id="pdf-prev">&#9664; Zur&uuml;ck</button>
+    <span class="page-label" id="pdf-pagelabel">Seite 1 / 1</span>
+    <button id="pdf-next">Weiter &#9654;</button>
+    <span class="pdf-title" id="pdf-title">PDF</span>
+    <button class="close-btn" id="pdf-close">&times;</button>
+  </div>
+  <div class="pdf-canvas-wrap" id="pdf-wrap">
+    <canvas id="pdf-canvas"></canvas>
+  </div>
+</div>
 
 <script>
 // ============================================================
@@ -684,13 +733,70 @@ function toggleDone(key){
 }
 
 // ============================================================
-// PDF VIEWER — opens in new tab with clean view
+// PDF VIEWER — pdf.js
 // ============================================================
-function openPDF(filename, title){
-  const base = window.location.origin + window.location.pathname.replace(/\/?$/, '');
-  const baseDir = base.substring(0, base.lastIndexOf('/') + 1);
-  window.open(baseDir + 'pdfs/' + encodeURI(filename) + '#toolbar=0&navpanes=0&scrollbar=0', '_blank');
+let pdfDoc = null;
+let pdfPage = 1;
+let pdfTotal = 0;
+
+function getPdfUrl(filename){
+  const path = window.location.pathname;
+  const baseDir = path.substring(0, path.lastIndexOf('/') + 1);
+  return window.location.origin + baseDir + 'pdfs/' + encodeURI(filename);
 }
+
+async function renderPdfPage(num){
+  const canvas = document.getElementById('pdf-canvas');
+  const ctx = canvas.getContext('2d');
+  const page = await pdfDoc.getPage(num);
+  const vp = page.getViewport({scale: 1.5});
+  canvas.width = vp.width;
+  canvas.height = vp.height;
+  await page.render({canvasContext: ctx, viewport: vp}).promise;
+  document.getElementById('pdf-pagelabel').textContent = 'Seite ' + num + ' / ' + pdfTotal;
+}
+
+async function openPDF(filename, title){
+  document.getElementById('pdf-title').textContent = title || filename;
+  document.getElementById('pdf-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  pdfPage = 1;
+  try {
+    const url = getPdfUrl(filename);
+    pdfDoc = await pdfjsLib.getDocument(url).promise;
+    pdfTotal = pdfDoc.numPages;
+    await renderPdfPage(1);
+  } catch(e) {
+    document.getElementById('pdf-pagelabel').textContent = 'Fehler beim Laden';
+  }
+}
+
+document.getElementById('pdf-close').addEventListener('click', ()=>{
+  document.getElementById('pdf-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  pdfDoc = null;
+});
+
+document.getElementById('pdf-prev').addEventListener('click', ()=>{
+  if(pdfDoc && pdfPage > 1){ pdfPage--; renderPdfPage(pdfPage); }
+});
+
+document.getElementById('pdf-next').addEventListener('click', ()=>{
+  if(pdfDoc && pdfPage < pdfTotal){ pdfPage++; renderPdfPage(pdfPage); }
+});
+
+document.addEventListener('keydown', e=>{
+  if(e.key === 'Escape'){
+    document.getElementById('pdf-close').click();
+  }
+  if(e.key === 'ArrowRight' || e.key === 'ArrowDown'){
+    document.getElementById('pdf-next').click();
+  }
+  if(e.key === 'ArrowLeft' || e.key === 'ArrowUp'){
+    document.getElementById('pdf-prev').click();
+  }
+});
+
 // ============================================================
 // NAVIGATION
 // ============================================================
