@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DRUM TRAINER</title>
+<style>
+/* === RESET & BASE === */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{
+  background:#0a0a0a;
+  color:#c0c0c0;
+  font-family:'Courier New','Consolas','Liberation Mono',monospace;
+  line-height:1.5;
+  min-height:100vh;
+}
+a{color:#00ff41;text-decoration:none}
+a:hover{text-decoration:underline}
+a:visited{color:#00cc33}
+::selection{background:#00ff41;color:#0a0a0a}
+
+/* === TYPOGRAPHY === */
+h1,h2,h3,h4{font-weight:400;text-transform:uppercase;letter-spacing:.05em}
+h1{font-size:1.8rem;color:#00ff41;margin-bottom:.5rem}
+h2{font-size:1.3rem;color:#e0e0e0;margin-bottom:1rem;border-bottom:1px solid #333;padding-bottom:.5rem}
+h3{font-size:1rem;color:#00ff41;margin-bottom:.5rem}
+h4{font-size:.85rem;color:#888;margin-bottom:.25rem}
+
+/* === LAYOUT === */
+.container{max-width:1200px;margin:0 auto;padding:1rem}
+
+/* === NAV === */
+nav{
+  background:#0d0d0d;
+  border-bottom:1px solid #333;
+  position:sticky;top:0;z-index:100;
+  padding:.5rem 1rem;
+}
+nav .container{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.5rem 0;flex-wrap:wrap;gap:.5rem;
+}
+.nav-brand{
+  font-size:1.2rem;font-weight:700;
+  color:#00ff41;text-transform:uppercase;
+  letter-spacing:.15em;white-space:nowrap;
+}
+.nav-links{display:flex;gap:0;flex-wrap:wrap}
+.nav-links a{
+  display:block;padding:.5rem 1rem;
+  color:#888;text-transform:uppercase;
+  font-size:.8rem;letter-spacing:.1em;
+  border:1px solid #333;border-right:none;
+  transition:all .15s;
+}
+.nav-links a:last-child{border-right:1px solid #333}
+.nav-links a:hover,.nav-links a.active{
+  background:#00ff41;color:#0a0a0a;text-decoration:none;
+}
+
+/* === CARDS / PANELS === */
+.card{
+  border:1px solid #333;
+  padding:1rem;margin-bottom:1rem;
+  background:#0d0d0d;
+}
+.card-header{
+  font-size:.75rem;color:#666;
+  text-transform:uppercase;letter-spacing:.1em;
+  margin-bottom:.5rem;border-bottom:1px solid #222;
+  padding-bottom:.5rem;
+}
+
+/* === GRID === */
+.grid-7{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.5rem}
+.grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
+
+/* === DAY CARD (for plan) === */
+.day-card{
+  border:1px solid #333;padding:.75rem;
+  background:#0d0d0d;
+}
+.day-card.active{border-color:#00ff41;background:#0f1f0f}
+.day-card h3{font-size:.8rem;margin-bottom:.5rem}
+.day-card .focus{font-size:.7rem;color:#00ff41;text-transform:uppercase;margin-bottom:.5rem}
+.day-card ul{list-style:none;font-size:.75rem}
+.day-card li{padding:.15rem 0;color:#999}
+.day-card li::before{content:'> ';color:#555}
+.day-card .time{font-size:.65rem;color:#555;margin-top:.5rem}
+
+/* === LIBRARY === */
+.book-card{
+  border:1px solid #333;padding:.75rem;
+  background:#0d0d0d;cursor:pointer;
+  transition:all .15s;position:relative;
+}
+.book-card:hover{border-color:#00ff41;background:#0f1f0f}
+.book-card .title{font-size:.85rem;color:#e0e0e0;margin-bottom:.25rem}
+.book-card .author{font-size:.7rem;color:#666}
+.book-card .cat-tag{
+  display:inline-block;font-size:.6rem;
+  padding:1px 6px;border:1px solid #444;color:#888;
+  margin-top:.5rem;text-transform:uppercase;
+}
+.book-card .pdf-icon{
+  position:absolute;top:.5rem;right:.5rem;
+  font-size:.7rem;color:#555;
+}
+.book-card:has(.cat-tag.tech){border-left:3px solid #00ff41}
+.book-card:has(.cat-tag.groove){border-left:3px solid #ff6b6b}
+.book-card:has(.cat-tag.jazz){border-left:3px solid #ffd700}
+.book-card:has(.cat-tag.latin){border-left:3px solid #00bfff}
+.book-card:has(.cat-tag.solo){border-left:3px solid #ff69b4}
+.book-card:has(.cat-tag.world){border-left:3px solid #9370db}
+
+/* === WORKOUT SECTION === */
+.workout-today .day-header{
+  font-size:1.4rem;color:#00ff41;
+  text-transform:uppercase;margin-bottom:.5rem;
+}
+.workout-today .focus-area{
+  font-size:.9rem;color:#e0e0e0;margin-bottom:1rem;
+}
+.exercise-item{
+  display:flex;align-items:flex-start;gap:.75rem;
+  padding:.75rem;border:1px solid #222;
+  margin-bottom:.5rem;cursor:pointer;
+  transition:all .15s;
+}
+.exercise-item:hover{border-color:#444}
+.exercise-item.done{
+  border-color:#333;opacity:.5;
+}
+.exercise-item.done .ex-title{text-decoration:line-through;color:#555}
+.exercise-item .check{
+  width:18px;height:18px;border:1px solid #555;
+  flex-shrink:0;margin-top:2px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.6rem;color:#0a0a0a;
+}
+.exercise-item.done .check{background:#00ff41;border-color:#00ff41}
+.exercise-item.done .check::after{content:'\2713';color:#0a0a0a}
+.exercise-info{flex:1}
+.exercise-info .ex-title{font-size:.85rem;color:#c0c0c0}
+.exercise-info .ex-desc{font-size:.7rem;color:#666;margin-top:.15rem}
+.exercise-info .ex-book{font-size:.65rem;color:#444;margin-top:.15rem}
+
+/* === TIMER === */
+.timer-panel{text-align:center;padding:1.5rem}
+.timer-display{font-size:3rem;color:#00ff41;font-family:inherit;margin:1rem 0}
+.timer-controls{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap}
+.timer-presets{display:flex;gap:.25rem;justify-content:center;margin-bottom:1rem;flex-wrap:wrap}
+.timer-presets button,.timer-controls button{
+  background:transparent;border:1px solid #333;
+  color:#888;padding:.4rem .8rem;
+  font-family:inherit;font-size:.75rem;text-transform:uppercase;
+  cursor:pointer;transition:all .15s;
+}
+.timer-presets button:hover,.timer-controls button:hover{
+  border-color:#00ff41;color:#00ff41;
+}
+.timer-controls button.start-btn{border-color:#00ff41;color:#00ff41}
+.timer-controls button.start-btn:hover{background:#00ff41;color:#0a0a0a}
+
+/* === SECTION TOGGLE === */
+.section{display:none}
+.section.active{display:block}
+
+/* === METRONOME === */
+.metro-bar{display:flex;align-items:center;gap:1rem;padding:.75rem;border:1px solid #222;margin-top:1rem;flex-wrap:wrap}
+.metro-bar label{font-size:.7rem;color:#666;text-transform:uppercase}
+.metro-bar input[type=range]{width:120px;background:#222;height:4px;-webkit-appearance:none;appearance:none}
+.metro-bar input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;background:#00ff41;border:none;cursor:pointer}
+.metro-bpm{font-size:1.4rem;color:#00ff41;min-width:3rem;text-align:center}
+.metro-btn{background:transparent;border:1px solid #333;color:#888;padding:.4rem .8rem;font-family:inherit;font-size:.75rem;cursor:pointer;text-transform:uppercase}
+.metro-btn:hover{border-color:#00ff41;color:#00ff41}
+.metro-btn.active{background:#00ff41;color:#0a0a0a;border-color:#00ff41}
+
+/* === STATS === */
+.stat-row{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem}
+.stat-box{
+  border:1px solid #333;padding:.75rem 1rem;
+  flex:1;min-width:120px;text-align:center;
+}
+.stat-box .num{font-size:1.6rem;color:#00ff41}
+.stat-box .label{font-size:.65rem;color:#666;text-transform:uppercase}
+
+/* === TODAY HIGHLIGHT === */
+.today-highlight{
+  border:1px solid #00ff41;padding:1rem;margin-bottom:1rem;
+  background:#0f1f0f;
+}
+.today-highlight .day{font-size:1.1rem;color:#00ff41}
+.today-highlight .focus-text{font-size:.85rem;color:#c0c0c0;margin-top:.5rem}
+.today-highlight a{display:inline-block;margin-top:.75rem;font-size:.8rem}
+
+/* === FILTER BAR === */
+.filter-bar{display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap}
+.filter-bar button{
+  background:transparent;border:1px solid #333;
+  color:#666;padding:.3rem .7rem;
+  font-family:inherit;font-size:.7rem;text-transform:uppercase;
+  cursor:pointer;transition:all .15s;
+}
+.filter-bar button:hover,.filter-bar button.active{color:#00ff41;border-color:#00ff41}
+.filter-bar button.active{background:#0f1f0f}
+
+/* === PDF VIEWER === */
+.pdf-viewer-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.9);z-index:200;
+  align-items:center;justify-content:center;
+}
+.pdf-viewer-overlay.open{display:flex}
+.pdf-viewer-box{
+  width:95vw;height:95vh;display:flex;flex-direction:column;
+}
+.pdf-viewer-box .viewer-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:.5rem 0;border-bottom:1px solid #333;
+}
+.pdf-viewer-box .viewer-header h3{color:#e0e0e0;font-size:.9rem}
+.pdf-viewer-box .viewer-close{
+  background:transparent;border:1px solid #333;color:#888;
+  padding:.3rem .6rem;cursor:pointer;font-family:inherit;font-size:.75rem;
+}
+.pdf-viewer-box .viewer-close:hover{border-color:#ff6b6b;color:#ff6b6b}
+.pdf-viewer-box iframe,.pdf-viewer-box object{flex:1;border:none;width:100%;height:100%}
+
+/* === PROGRESS BAR === */
+.progress-bar{height:4px;background:#222;margin:.5rem 0}
+.progress-bar .fill{height:100%;background:#00ff41;transition:width .3s;width:0%}
+
+/* === RESPONSIVE === */
+@media(max-width:640px){
+  nav .container{flex-direction:column;align-items:stretch}
+  .nav-links{justify-content:stretch}
+  .nav-links a{flex:1;text-align:center;font-size:.65rem;padding:.4rem .5rem}
+  h1{font-size:1.3rem}
+  .grid-7{grid-template-columns:repeat(auto-fit,minmax(100px,1fr))}
+  .grid-4{grid-template-columns:1fr}
+  .timer-display{font-size:2rem}
+  .stat-row{flex-direction:column}
+}
+
+/* === UTILITIES === */
+.mt-1{margin-top:1rem}
+.mb-1{margin-bottom:1rem}
+.text-center{text-align:center}
+.text-muted{color:#666;font-size:.75rem}
+.flex-between{display:flex;justify-content:space-between;align-items:center}
+.tag{
+  display:inline-block;font-size:.6rem;
+  padding:1px 6px;border:1px solid #444;color:#888;
+  text-transform:uppercase;
+}
+
+/* scrollbar */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#0a0a0a}
+::-webkit-scrollbar-thumb{background:#333}
+::-webkit-scrollbar-thumb:hover{background:#555}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="container">
+    <span class="nav-brand">[ DRUM TRAINER ]</span>
+    <div class="nav-links">
+      <a href="#" data-section="home" class="active">Home</a>
+      <a href="#" data-section="plan">Plan</a>
+      <a href="#" data-section="library">Library</a>
+      <a href="#" data-section="workout">Workout</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- ==================== HOME ==================== -->
+<section id="section-home" class="section active">
+  <h1>DRUM TRAINER</h1>
+  <p class="text-muted mb-1">Trainingsplan & Bibliothek — v1.0</p>
+
+  <div id="today-highlight" class="today-highlight"></div>
+
+  <h2>Wochenübersicht</h2>
+  <div class="grid-7" id="week-grid">
+    <div class="day-card" data-day="1"><h3>MO</h3><div class="focus">Rudiments & Stick Control</div></div>
+    <div class="day-card" data-day="2"><h3>DI</h3><div class="focus">Grooves & Funk</div></div>
+    <div class="day-card" data-day="3"><h3>MI</h3><div class="focus">Coordination</div></div>
+    <div class="day-card" data-day="4"><h3>DO</h3><div class="focus">Jazz & Bop</div></div>
+    <div class="day-card" data-day="5"><h3>FR</h3><div class="focus">World Rhythms</div></div>
+    <div class="day-card" data-day="6"><h3>SA</h3><div class="focus">Solos & Application</div></div>
+    <div class="day-card" data-day="0"><h3>SO</h3><div class="focus">Technique & Review</div></div>
+  </div>
+
+  <h2 class="mt-1">Statistiken</h2>
+  <div class="stat-row">
+    <div class="stat-box"><div class="num" id="stat-books">23</div><div class="label">Bücher</div></div>
+    <div class="stat-box"><div class="num" id="stat-today-done">0</div><div class="label">Heute erledigt</div></div>
+    <div class="stat-box"><div class="num">7</div><div class="label">Trainingstage</div></div>
+    <div class="stat-box"><div class="num">35+</div><div class="label">Übungen/Woche</div></div>
+  </div>
+</section>
+
+<!-- ==================== PLAN ==================== -->
+<section id="section-plan" class="section">
+  <h1>TRAININGSPLAN</h1>
+  <p class="text-muted mb-1">Feste Wochenstruktur — jeden Tag ein anderer Fokus</p>
+
+  <div id="plan-container"></div>
+
+  <div class="card mt-1">
+    <div class="card-header">Hinweise</div>
+    <ul style="list-style:none;font-size:.8rem;color:#888">
+      <li style="padding:.2rem 0">• Jede Session 45-90 Minuten einplanen</li>
+      <li style="padding:.2rem 0">• Mit Warmup beginnen (5-10 min rudiments an der Snare)</li>
+      <li style="padding:.2rem 0">• Metronom verwenden — starte langsam, steigere BPM</li>
+      <li style="padding:.2rem 0">• PDFs in der Library öffnen und mitlaufen lassen</li>
+      <li style="padding:.2rem 0">• Sonntag = leichter Tag: Review, Schwachstellen, freies Spiel</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ==================== LIBRARY ==================== -->
+<section id="section-library" class="section">
+  <h1>BIBLIOTHEK</h1>
+  <p class="text-muted mb-1">Alle Drum-Bücher — klicke zum Öffnen</p>
+
+  <div class="filter-bar" id="filter-bar">
+    <button class="active" data-filter="all">Alle</button>
+  </div>
+
+  <div class="grid-4" id="library-grid"></div>
+</section>
+
+<!-- ==================== WORKOUT ==================== -->
+<section id="section-workout" class="section">
+  <h1>HEUTIGES WORKOUT</h1>
+  <p class="text-muted mb-1">Automatisch basierend auf dem Wochentag</p>
+
+  <div id="workout-container"></div>
+
+  <!-- TIMER & METRONOME -->
+  <div class="card timer-panel mt-1">
+    <div class="card-header">Timer & Metronom</div>
+
+    <div class="timer-presets">
+      <button data-min="5">5 min</button>
+      <button data-min="10">10 min</button>
+      <button data-min="15">15 min</button>
+      <button data-min="30">30 min</button>
+      <button data-min="45">45 min</button>
+      <button data-min="60">60 min</button>
+    </div>
+    <div class="timer-display" id="timer-display">00:00</div>
+    <div class="timer-controls">
+      <button class="start-btn" id="timer-start">START</button>
+      <button id="timer-reset">RESET</button>
+    </div>
+
+    <div class="metro-bar">
+      <label>BPM</label>
+      <span class="metro-bpm" id="metro-bpm">120</span>
+      <input type="range" id="metro-slider" min="30" max="280" value="120">
+      <button class="metro-btn" id="metro-btn">START</button>
+      <label style="margin-left:.5rem">TAP</label>
+      <button class="metro-btn" id="metro-tap">TAP</button>
+    </div>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<!-- ==================== PDF VIEWER ==================== -->
+<div class="pdf-viewer-overlay" id="pdf-viewer">
+  <div class="pdf-viewer-box">
+    <div class="viewer-header">
+      <h3 id="pdf-title">PDF</h3>
+      <button class="viewer-close" id="pdf-close">SCHLIESSEN [X]</button>
+    </div>
+    <iframe id="pdf-frame" src=""></iframe>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const BOOKS = [
+  { id:'stick-control', title:'Stick Control', author:'George L. Stone', cat:'tech', pdf:'Benny Greb - The Language of Drumming.pdf', desc:'Das Fundament. Single/Double Strokes, Paradiddles — tägliches Warmup' },
+  { id:'accents-rebounds', title:'Accents and Rebounds', author:'George L. Stone', cat:'tech', pdf:'George L. Stone - Accents and Rebounds.pdf', desc:'Akzente und rebound-Übungen für Dynamik und Kontrolle' },
+  { id:'master-studies', title:'Master Studies', author:'Joe Morello', cat:'tech', pdf:'Joe Morello - Master Studies.pdf', desc:'Fortgeschrittene Technik, Finger control, Moeller-Technik' },
+  { id:'4-way', title:'4-Way Coordination', author:'Marvin Dahlgren', cat:'tech', pdf:'Marvin Dahlgren - 4-Way Coordination.pdf', desc:'Unabhängigkeit aller 4 Gliedmassen' },
+  { id:'advanced-tech', title:'Advanced Techniques', author:'Jim Chapin', cat:'tech', pdf:'Jim Chapin - Advanced Techniques for the Modern Drummer.pdf', desc:'Klassiker der Unabhängigkeit, paradiddle-basiert' },
+  { id:'future-sounds', title:'Future Sounds', author:'David Garibaldi', cat:'groove', pdf:'David Garibaldi - Future Sounds.pdf', desc:'Funk-Grooves, 16th-Note-Koordination, Ghost Notes' },
+  { id:'advanced-funk', title:'Advanced Funk Studies', author:'Rick Latham', cat:'groove', pdf:'Rick Latham - Advanced Funk Studies.pdf', desc:'Funk-Grooves, linear Drumming, Bass Drum Kontrolle' },
+  { id:'funky-primer', title:'A Funky Primer', author:'Charles Dowd', cat:'groove', pdf:'Charles Dowd - A Funky Primer for the Rock Drummer.pdf', desc:'Einstieg in Rock/Funk — einfache Grooves, fills' },
+  { id:'syncopation', title:'Progressive Steps to Syncopation', author:'Ted Reed', cat:'groove', pdf:'Ted Reed - Progressive Steps to Syncopation.pdf', desc:'Der Syncopation-Bibel. Reading, Groove-Variationen' },
+  { id:'bop', title:'The Art of Bop Drumming', author:'John Riley', cat:'jazz', pdf:'John Riley - The Art of Bop Drumming.pdf', desc:'Jazz-Grundlagen: Ride, Comping, Solos' },
+  { id:'beyond-bop', title:'Beyond Bop Drumming', author:'John Riley', cat:'jazz', pdf:'John Riley - Beyond Bop Drumming.pdf', desc:'Fortgeschrittener Jazz: Latin-Jazz, odd meters, Solos' },
+  { id:'jazz-evolution', title:'The Evolution of Jazz Drumming', author:'Various', cat:'jazz', pdf:'The Evolution of Jazz Drumming.pdf', desc:'Geschichte + Transkriptionen der Jazz-Grössen' },
+  { id:'afrocuban', title:'Afro-Cuban Rhythms for Drumset', author:'Malabe & Weiner', cat:'latin', pdf:'Frank Malabe & Bob Weiner - Afro-Cuban Rhythms for Drumset.pdf', desc:'Clave, Cascara, Mambo, Songo — alle Latin-Rhythmen' },
+  { id:'clave', title:'Conversations in Clave', author:'Horacio Hernandez', cat:'latin', pdf:'Horacio Hernandez - Conversations in Clave.pdf', desc:'Fortgeschrittene Clave-Konzepte, Polyrhythmen' },
+  { id:'all-american', title:'The All-American Drummer', author:'Charley Wilcoxon', cat:'solo', pdf:'Charley Wilcoxon - The All-American Drummer - 150 Rudimental Solos.pdf', desc:'150 Rudimental Solos — der Standard' },
+  { id:'wilcoxon-solos', title:'Modern Rudimental Swing Solos', author:'Charley Wilcoxon', cat:'solo', pdf:'Charley Wilcoxon - Modern Rudimental Swing Solos.pdf', desc:'Rudimental Solos im Swing-Stil' },
+  { id:'harr-solos', title:'9 Complete Drum Solos', author:'Haskell W. Harr', cat:'solo', pdf:'Haskell W. Harr - 9 Complete Drum Solos.pdf', desc:'Komplette Solos für Contest/Vorspiel' },
+  { id:'new-breed', title:'The New Breed', author:'Gary Chester', cat:'world', pdf:'Gary Chester - The New Breed.pdf', desc:'System für totale Unabhängigkeit — 24 Patterns, endlose Kombinationen' },
+  { id:'language-drumming', title:'The Language of Drumming', author:'Benny Greb', cat:'world', pdf:'Benny Greb - The Language of Drumming.pdf', desc:'Konzepte: Timing, Feel, Groove, Solo-Vokabular' },
+  { id:'realistic-rock', title:'Ultimate Realistic Rock', author:'Carmine Appice', cat:'world', pdf:'Carmine Appice - Ultimate Realistic Rock.pdf', desc:'Rock-Essentials: Grooves, Fills, Solos, Double Bass' },
+  { id:'gaddiments', title:'Gaddiments', author:'Steve Gadd', cat:'world', pdf:'Steve Gadd - Gaddiments.pdf', desc:'Gadds Übungssystem — Technik, Timing, Kreativität' },
+  { id:'groove-essentials', title:'Groove Essentials', author:'Tommy Igoe', cat:'world', pdf:'Tommy Igoe - Groove Essentials.pdf', desc:'Über 50 Grooves aus aller Welt — das Groove-Lexikon' },
+  { id:'wrist-twisters', title:'Wrist Twisters', author:'Various', cat:'tech', pdf:'Wrist Twisters.pdf', desc:'Handgeschwindigkeit, Ausdauer, Finger/Forearm-Technik' }
+];
+
+const WEEK = [
+  {
+    day:'Sonntag', dayShort:'SO', focus:'Technique & Review',
+    desc:'Leichter Tag — Schwachstellen angehen, Review der Woche',
+    time:'45 min', color:'#9370db',
+    exercises:[
+      { title:'Endurance Routine', desc:'Wrist Twisters — 10 min endurance drills', book:'Wrist Twisters' },
+      { title:'Language of Drumming', desc:'Greb-Konzepte wiederholen — Timing & Feel', book:'The Language of Drumming' },
+      { title:'Groove Essentials', desc:'Neue Grooves ausprobieren, wenn gewünscht', book:'Groove Essentials' },
+      { title:'Free Play', desc:'Was auch immer Spass macht — kreativ sein', book:'' },
+      { title:'Review', desc:'Letzte Woche durchgehen — woran weiterarbeiten?', book:'' }
+    ]
+  },
+  {
+    day:'Montag', dayShort:'MO', focus:'Rudiments & Stick Control',
+    desc:'Technik-Grundlagen — Hände aufbauen, Sauberkeit',
+    time:'60-90 min', color:'#00ff41',
+    exercises:[
+      { title:'Stick Control pp.5-10', desc:'Single stroke combinations — jede Zeile 2 min', book:'Stick Control' },
+      { title:'Accents & Rebounds', desc:'Accent patterns pp.3-8 — akzentuierte Strokes', book:'Accents and Rebounds' },
+      { title:'Master Studies pp.1-15', desc:'Finger control, Moeller, rebound', book:'Master Studies' },
+      { title:'Paradiddle Variations', desc:'Single/Double Paradiddles über das Kit verteilen', book:'Stick Control' },
+      { title:'Wrist Twisters', desc:'Geschwindigkeit & Ausdauer — 10 min', book:'Wrist Twisters' }
+    ]
+  },
+  {
+    day:'Dienstag', dayShort:'DI', focus:'Grooves & Funk',
+    desc:'Groove-Work — 16tel, Ghost Notes, Pocket',
+    time:'60-90 min', color:'#ff6b6b',
+    exercises:[
+      { title:'Future Sounds pp.10-25', desc:'Basic funk patterns, ghost note exercises', book:'Future Sounds' },
+      { title:'Advanced Funk Studies', desc:'Linear grooves, bass drum independence', book:'Advanced Funk Studies' },
+      { title:'Funky Primer', desc:'Rock-Grooves, einfache Fills — sauber spielen', book:'A Funky Primer' },
+      { title:'Syncopation pp.1-20', desc:'Reading + Groove-Variationen über Reed', book:'Syncopation' },
+      { title:'Metronome Practice', desc:'Ausgewählte Grooves 80→120 BPM steigern', book:'' }
+    ]
+  },
+  {
+    day:'Mittwoch', dayShort:'MI', focus:'Coordination & Independence',
+    desc:'Limb independence — The New Breed System',
+    time:'60-90 min', color:'#ffd700',
+    exercises:[
+      { title:'The New Breed System', desc:'Pattern 1-8 mit allen Exercise-Gruppen kombinieren', book:'The New Breed' },
+      { title:'4-Way Coordination', desc:'Dahlgren-Übungen — langsam aufbauen', book:'4-Way Coordination' },
+      { title:'Advanced Techniques', desc:'Chapin — paradiddle independence', book:'Advanced Techniques' },
+      { title:'Ostinato Practice', desc:'Ride/SH-Ostinato + unabhängige Bassdrum/Snare', book:'The New Breed' },
+      { title:'Limb Combinations', desc:'Eigene Kombos aus den Patterns bauen', book:'' }
+    ]
+  },
+  {
+    day:'Donnerstag', dayShort:'DO', focus:'Jazz & Bop',
+    desc:'Jazz Ride, Comping, Solos — Swing-Feeling',
+    time:'60-75 min', color:'#ffd700',
+    exercises:[
+      { title:'Art of Bop pp.8-20', desc:'Basic jazz ride pattern, hi-hat, comping', book:'The Art of Bop Drumming' },
+      { title:'Beyond Bop pp.5-15', desc:'Latin-Jazz Konzepte, odd meters', book:'Beyond Bop Drumming' },
+      { title:'Jazz Solos üben', desc:'Transkriptionen aus Evolution of Jazz Drumming', book:'The Evolution of Jazz Drumming' },
+      { title:'Trading Fours', desc:'4-Takt-Solos über Jazz-Form', book:'' },
+      { title:'Brush Technique', desc:'(Optional) Basics für Besen', book:'' }
+    ]
+  },
+  {
+    day:'Freitag', dayShort:'FR', focus:'World Rhythms & Afro-Cuban',
+    desc:'Clave, Latin-Grooves, Polyrhythmen',
+    time:'60-75 min', color:'#00bfff',
+    exercises:[
+      { title:'Afro-Cuban Rhythms', desc:'Son Clave, Cascara, Mambo Basics', book:'Afro-Cuban Rhythms for Drumset' },
+      { title:'Conversations in Clave', desc:'Clave-Konzepte, Polyrhythmen', book:'Conversations in Clave' },
+      { title:'Song & Rumba', desc:'Songostile aus dem Malabe-Buch', book:'Afro-Cuban Rhythms for Drumset' },
+      { title:'Latin Groove Application', desc:'Latin-Grooves aufs Drumset übertragen', book:'' },
+      { title:'BPM Challenge', desc:'Ausgewählte Latin-Grooves sauber halten', book:'' }
+    ]
+  },
+  {
+    day:'Samstag', dayShort:'SA', focus:'Solos & Application',
+    desc:'Alles kombinieren — Solos, Transkriptionen, Kreativität',
+    time:'60-90 min', color:'#ff69b4',
+    exercises:[
+      { title:'All-American Drummer', desc:'1-2 Rudimental Solos durcharbeiten', book:'The All-American Drummer' },
+      { title:'Wilcoxon Swing Solos', desc:'Swing Solos — Timing und Dynamik', book:'Modern Rudimental Swing Solos' },
+      { title:'Gaddiments', desc:'Gadds Solokonzepte studieren', book:'Gaddiments' },
+      { title:'Eigenes Solo bauen', desc:'Diese Woche gelernte Konzepte kombinieren', book:'' },
+      { title:'Jam / Playalong', desc:'Zu Musik spielen — alles anwenden', book:'' }
+    ]
+  }
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let currentSection = 'home';
+let activeFilter = 'all';
+let timerInterval = null;
+let timerSeconds = 0;
+let timerRunning = false;
+let metroInterval = null;
+let metroRunning = false;
+let metroBpm = 120;
+let tapTimes = [];
+
+// Load checkbox state from localStorage
+let doneState = JSON.parse(localStorage.getItem('drumTrainerDone') || '{}');
+
+function saveDone(){localStorage.setItem('drumTrainerDone',JSON.stringify(doneState))}
+
+function getTodayIndex(){
+  const d = new Date().getDay(); // 0=Sun
+  return d;
+}
+
+// ============================================================
+// RENDER FUNCTIONS
+// ============================================================
+
+function renderTodayHighlight(){
+  const idx = getTodayIndex();
+  const day = WEEK[idx];
+  const names = ['SO','MO','DI','MI','DO','FR','SA'];
+  const fullNames = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+  const el = document.getElementById('today-highlight');
+  el.innerHTML = `
+    <div class="day">${fullNames[idx]} › ${day.focus}</div>
+    <div class="focus-text">${day.desc} — ${day.time}</div>
+    <a href="#" onclick="showSection('workout');return false">[ Zum heutigen Workout ]</a>
+  `;
+  document.querySelectorAll('.day-card').forEach(c=>c.classList.remove('active'));
+  const card = document.querySelector(`.day-card[data-day="${idx}"]`);
+  if(card) card.classList.add('active');
+}
+
+function renderWeekGrid(){
+  const names = ['SO','MO','DI','MI','DO','FR','SA'];
+  document.querySelectorAll('.day-card').forEach((c,i)=>{
+    const idx = parseInt(c.dataset.day);
+    const day = WEEK[idx];
+    c.querySelector('h3').textContent = names[idx];
+    c.querySelector('.focus').textContent = day.focus;
+  });
+}
+
+function renderPlan(){
+  const names = ['SO','MO','DI','MI','DO','FR','SA'];
+  const container = document.getElementById('plan-container');
+  let html = '';
+  WEEK.forEach((day,idx)=>{
+    const isToday = idx === getTodayIndex();
+    html += `<div class="day-card ${isToday?'active':''}" style="margin-bottom:1rem;padding:1rem">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem">
+        <h3 style="font-size:1rem;margin:0">${names[idx]} — ${day.focus}</h3>
+        <span style="font-size:.7rem;color:#555">${day.time}</span>
+      </div>
+      <p style="font-size:.75rem;color:#888;margin-bottom:.75rem">${day.desc}</p>
+      <ul style="list-style:none">`;
+    day.exercises.forEach((ex,ei)=>{
+      const key = `plan-${idx}-${ei}`;
+      const done = doneState[key] || false;
+      html += `<li style="padding:.3rem 0;font-size:.8rem;display:flex;align-items:center;gap:.5rem;${done?'opacity:.5':''}">
+        <span style="cursor:pointer;width:16px;height:16px;border:1px solid ${done?'#00ff41':'#555'};display:inline-flex;align-items:center;justify-content:center;font-size:.5rem;background:${done?'#00ff41':'transparent'}"
+          onclick="toggleDone('plan-${idx}-${ei}')">${done?'\u2713':''}</span>
+        <span style="${done?'text-decoration:line-through;color:#555':''}"><strong>${ex.title}</strong> — ${ex.desc}${ex.book?` <span style="color:#555">[${ex.book}]</span>`:''}</span>
+      </li>`;
+    });
+    html += `</ul></div>`;
+  });
+  container.innerHTML = html;
+}
+
+function renderLibrary(filter){
+  const grid = document.getElementById('library-grid');
+  const filtered = filter === 'all' ? BOOKS : BOOKS.filter(b=>b.cat===filter);
+  let html = '';
+  filtered.forEach(b=>{
+    html += `<div class="book-card" onclick="openPDF('${b.pdf.replace(/'/g,"\\'")}','${b.title.replace(/'/g,"\\'")}')">
+      <div class="pdf-icon">[PDF]</div>
+      <div class="title">${b.title}</div>
+      <div class="author">${b.author}</div>
+      <span class="cat-tag ${b.cat}">${b.cat}</span>
+    </div>`;
+  });
+  grid.innerHTML = html || '<p class="text-muted">Keine Bücher in dieser Kategorie</p>';
+}
+
+function renderFilterBar(){
+  const bar = document.getElementById('filter-bar');
+  const cats = [...new Set(BOOKS.map(b=>b.cat))];
+  let html = '<button class="active" data-filter="all" onclick="setFilter(\'all\')">Alle</button>';
+  cats.forEach(c=>{
+    const names = {tech:'Technik',groove:'Groove/Funk',jazz:'Jazz',latin:'Latin/Afro',solo:'Solos',world:'Methoden'};
+    html += `<button data-filter="${c}" onclick="setFilter('${c}')">${names[c]||c}</button>`;
+  });
+  bar.innerHTML = html;
+}
+
+function renderWorkout(){
+  const idx = getTodayIndex();
+  const day = WEEK[idx];
+  const names = ['SO','MO','DI','MI','DO','FR','SA'];
+  const fullNames = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+  const container = document.getElementById('workout-container');
+
+  let exHtml = '';
+  day.exercises.forEach((ex,ei)=>{
+    const key = `workout-${ei}`;
+    const done = doneState[key] || false;
+    exHtml += `<div class="exercise-item ${done?'done':''}" onclick="toggleDone('workout-${ei}')">
+      <div class="check">${done?'\u2713':''}</div>
+      <div class="exercise-info">
+        <div class="ex-title">${ex.title}</div>
+        <div class="ex-desc">${ex.desc}</div>
+        ${ex.book ? `<div class="ex-book">[ ${ex.book} ]</div>` : ''}
+      </div>
+    </div>`;
+  });
+
+  // Count completed
+  const total = day.exercises.length;
+  const doneCount = day.exercises.filter((_,ei)=>doneState[`workout-${ei}`]).length;
+  const pct = total ? Math.round(doneCount/total*100) : 0;
+
+  container.innerHTML = `
+    <div class="workout-today">
+      <div class="day-header">${fullNames[idx]} — ${day.focus}</div>
+      <div class="focus-area">${day.desc} — ${day.time}</div>
+      <div class="progress-bar"><div class="fill" style="width:${pct}%"></div></div>
+      <div style="font-size:.7rem;color:#555;margin-bottom:1rem">${doneCount}/${total} Übungen erledigt</div>
+      ${exHtml}
+    </div>
+  `;
+  document.getElementById('stat-today-done').textContent = doneCount;
+}
+
+function setFilter(cat){
+  activeFilter = cat;
+  document.querySelectorAll('#filter-bar button').forEach(b=>{
+    b.classList.toggle('active',b.dataset.filter===cat);
+  });
+  renderLibrary(cat);
+}
+
+function toggleDone(key){
+  doneState[key] = !doneState[key];
+  saveDone();
+  renderPlan();
+  renderWorkout();
+  renderTodayHighlight();
+}
+
+// ============================================================
+// PDF VIEWER
+// ============================================================
+function openPDF(filename, title){
+  document.getElementById('pdf-title').textContent = title || filename;
+  document.getElementById('pdf-frame').src = 'pdfs/' + encodeURI(filename);
+  document.getElementById('pdf-viewer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+document.getElementById('pdf-close').addEventListener('click', ()=>{
+  document.getElementById('pdf-viewer').classList.remove('open');
+  document.getElementById('pdf-frame').src = '';
+  document.body.style.overflow = '';
+});
+document.getElementById('pdf-viewer').addEventListener('click', e=>{
+  if(e.target === e.currentTarget){
+    document.getElementById('pdf-close').click();
+  }
+});
+document.addEventListener('keydown', e=>{
+  if(e.key === 'Escape'){
+    document.getElementById('pdf-close').click();
+  }
+});
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function showSection(name){
+  currentSection = name;
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('section-'+name).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a=>{
+    a.classList.toggle('active',a.dataset.section===name);
+  });
+  if(name === 'library') renderLibrary(activeFilter);
+  if(name === 'plan') renderPlan();
+  if(name === 'workout') renderWorkout();
+  if(name === 'home') renderTodayHighlight();
+}
+
+document.querySelectorAll('.nav-links a').forEach(a=>{
+  a.addEventListener('click', e=>{
+    e.preventDefault();
+    showSection(a.dataset.section);
+  });
+});
+
+// ============================================================
+// TIMER
+// ============================================================
+const timerDisplay = document.getElementById('timer-display');
+const timerStart = document.getElementById('timer-start');
+const timerReset = document.getElementById('timer-reset');
+
+function formatTime(sec){
+  const m = String(Math.floor(sec/60)).padStart(2,'0');
+  const s = String(sec%60).padStart(2,'0');
+  return `${m}:${s}`;
+}
+
+document.querySelectorAll('.timer-presets button').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    if(timerRunning) return;
+    timerSeconds = parseInt(b.dataset.min)*60;
+    timerDisplay.textContent = formatTime(timerSeconds);
+  });
+});
+
+timerStart.addEventListener('click', ()=>{
+  if(timerRunning){
+    clearInterval(timerInterval);
+    timerRunning = false;
+    timerStart.textContent = 'START';
+    timerStart.classList.remove('start-btn');
+    return;
+  }
+  if(timerSeconds <= 0) timerSeconds = 600;
+  timerRunning = true;
+  timerStart.textContent = 'STOP';
+  timerStart.classList.add('start-btn');
+  timerInterval = setInterval(()=>{
+    timerSeconds--;
+    timerDisplay.textContent = formatTime(Math.max(0,timerSeconds));
+    if(timerSeconds <= 0){
+      clearInterval(timerInterval);
+      timerRunning = false;
+      timerStart.textContent = 'DONE!';
+      timerDisplay.textContent = '00:00';
+    }
+  }, 1000);
+});
+
+timerReset.addEventListener('click', ()=>{
+  clearInterval(timerInterval);
+  timerRunning = false;
+  timerSeconds = 0;
+  timerDisplay.textContent = '00:00';
+  timerStart.textContent = 'START';
+});
+
+// ============================================================
+// METRONOME
+// ============================================================
+const audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+const metroSlider = document.getElementById('metro-slider');
+const metroBpmEl = document.getElementById('metro-bpm');
+const metroBtn = document.getElementById('metro-btn');
+const metroTap = document.getElementById('metro-tap');
+
+metroSlider.addEventListener('input', ()=>{
+  metroBpm = parseInt(metroSlider.value);
+  metroBpmEl.textContent = metroBpm;
+  if(metroRunning){
+    clearInterval(metroInterval);
+    startMetro();
+  }
+});
+
+function startMetro(){
+  const interval = 60000 / metroBpm;
+  let count = 0;
+  metroInterval = setInterval(()=>{
+    playClick(count === 0);
+    count = (count + 1) % 4;
+  }, interval);
+}
+
+function playClick(isAccent){
+  try{
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.frequency.value = isAccent ? 1200 : 900;
+    gain.gain.value = isAccent ? 0.3 : 0.15;
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+    osc.start(audioCtx.currentTime);
+    osc.stop(audioCtx.currentTime + 0.05);
+  }catch(e){}
+}
+
+metroBtn.addEventListener('click', ()=>{
+  if(audioCtx.state === 'suspended') audioCtx.resume();
+  if(metroRunning){
+    clearInterval(metroInterval);
+    metroRunning = false;
+    metroBtn.textContent = 'START';
+    metroBtn.classList.remove('active');
+  } else {
+    metroRunning = true;
+    metroBtn.textContent = 'STOP';
+    metroBtn.classList.add('active');
+    startMetro();
+  }
+});
+
+metroTap.addEventListener('click', ()=>{
+  if(audioCtx.state === 'suspended') audioCtx.resume();
+  const now = Date.now();
+  tapTimes.push(now);
+  if(tapTimes.length > 5) tapTimes.shift();
+  if(tapTimes.length >= 2){
+    const intervals = [];
+    for(let i=1; i<tapTimes.length; i++){
+      intervals.push(tapTimes[i] - tapTimes[i-1]);
+    }
+    const avg = intervals.reduce((a,b)=>a+b,0)/intervals.length;
+    const bpm = Math.round(60000/avg);
+    if(bpm >= 30 && bpm <= 280){
+      metroBpm = bpm;
+      metroSlider.value = bpm;
+      metroBpmEl.textContent = bpm;
+      if(metroRunning){
+        clearInterval(metroInterval);
+        startMetro();
+      }
+    }
+  }
+});
+
+// ============================================================
+// INIT
+// ============================================================
+renderFilterBar();
+renderLibrary('all');
+renderTodayHighlight();
+renderWeekGrid();
+renderPlan();
+renderWorkout();
+</script>
+
+</body>
+</html>
