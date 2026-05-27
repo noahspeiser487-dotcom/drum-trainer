@@ -6,618 +6,314 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>DRUM TRAINER</title>
+<title>Drum Trainer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ============================================================
-   RESET & BASE — Studio Dark Mode
-   ============================================================ */
+/* ─── RESET & BASE ─── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{font-size:16px;scroll-behavior:smooth}
 body{
-  background:#050505;
-  color:#e4e4e7;
-  font-family:'Inter','SF Pro Display',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:#08080c;
+  color:#c8c8d0;
+  font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   line-height:1.6;
   min-height:100vh;
   -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
 }
-a{color:#a1a1aa;text-decoration:none;transition:color .2s}
+a{color:#a0a0b0;text-decoration:none;transition:color .2s}
 a:hover{color:#ffffff}
-::selection{background:#3b82f6;color:#ffffff}
+::selection{background:#0066ff;color:#ffffff}
 
-/* ============================================================
-   TYPOGRAPHY
-   ============================================================ */
-h1{font-size:1.6rem;font-weight:600;color:#ffffff;letter-spacing:-0.01em;margin-bottom:.35rem}
-h2{font-size:1.1rem;font-weight:500;color:#e4e4e7;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid #27272a;letter-spacing:-0.005em}
-h3{font-size:.9rem;font-weight:500;color:#f4f4f5;margin-bottom:.4rem}
-h4{font-size:.8rem;font-weight:400;color:#71717a;margin-bottom:.25rem}
+/* ─── TYPOGRAPHY ─── */
+h1{font-size:1.7rem;font-weight:700;color:#ffffff;letter-spacing:-0.02em;margin-bottom:.3rem}
+h2{font-size:1.15rem;font-weight:600;color:#e0e0e8;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid #1e1e28;letter-spacing:-0.01em}
+h3{font-size:.9rem;font-weight:600;color:#f0f0f5;margin-bottom:.35rem}
+h4{font-size:.8rem;font-weight:500;color:#808090;margin-bottom:.2rem}
 
-/* ============================================================
-   CONTAINER
-   ============================================================ */
-.container{max-width:1200px;margin:0 auto;padding:1.25rem 1.5rem}
+/* ─── CONTAINER ─── */
+.container{max-width:1200px;margin:0 auto;padding:1.25rem 1.75rem}
 
-/* ============================================================
-   NAV — Glass-morphism sticky bar
-   ============================================================ */
+/* ─── NAV ─── */
 nav{
-  background:rgba(5,5,5,.85);
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
-  border-bottom:1px solid #27272a;
-  position:sticky;
-  top:0;
-  z-index:100;
+  background:#0c0c14;
+  border-bottom:1px solid #1e1e28;
+  position:sticky;top:0;z-index:100;
 }
 nav .container{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:.65rem 1.5rem;
-  flex-wrap:wrap;
-  gap:.5rem;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.6rem 1.75rem;flex-wrap:wrap;gap:.5rem;
 }
 .nav-brand{
-  font-size:1.05rem;
-  font-weight:600;
-  color:#ffffff;
-  letter-spacing:0.04em;
-  background:linear-gradient(135deg,#ffffff 40%,#3b82f6 100%);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  background-clip:text;
-  white-space:nowrap;
+  font-size:1.1rem;font-weight:700;color:#ffffff;
+  letter-spacing:-0.01em;white-space:nowrap;
 }
-.nav-links{display:flex;gap:2px;flex-wrap:wrap;background:#18181b;border-radius:10px;padding:3px}
+.nav-brand span{color:#0066ff}
+.nav-links{display:flex;gap:2px;flex-wrap:wrap}
 .nav-links a{
-  display:block;
-  padding:.4rem 1rem;
-  color:#71717a;
-  font-size:.78rem;
-  font-weight:500;
-  border-radius:8px;
-  transition:all .2s;
+  display:block;padding:.4rem .95rem;
+  color:#808090;font-size:.78rem;font-weight:500;
+  border-radius:8px;transition:all .2s;
 }
-.nav-links a:hover{color:#e4e4e7;background:#27272a}
-.nav-links a.active{
-  color:#ffffff;
-  background:#3b82f6;
-}
+.nav-links a:hover{color:#ffffff;background:#18182a}
+.nav-links a.active{color:#ffffff;background:#0066ff}
 
-/* ============================================================
-   CARDS / PANELS
-   ============================================================ */
+/* ─── CARDS ─── */
 .card{
-  background:#18181b;
-  border:1px solid #27272a;
-  border-radius:12px;
-  padding:1.25rem;
-  margin-bottom:1.25rem;
-  transition:border-color .2s;
+  background:#12121c;
+  border:1px solid #1e1e28;
+  border-radius:10px;padding:1.25rem;
+  margin-bottom:1.15rem;
 }
-.card:hover{border-color:#3f3f46}
 .card-header{
-  font-size:.68rem;
-  font-weight:600;
-  color:#71717a;
-  text-transform:uppercase;
-  letter-spacing:0.06em;
-  margin-bottom:.85rem;
-  padding-bottom:.65rem;
-  border-bottom:1px solid #27272a;
+  font-size:.68rem;font-weight:600;color:#606070;
+  text-transform:uppercase;letter-spacing:0.06em;
+  margin-bottom:.75rem;padding-bottom:.55rem;
+  border-bottom:1px solid #1e1e28;
 }
 
-/* ============================================================
-   GRID
-   ============================================================ */
-.grid-7{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
-  gap:.6rem;
-}
-.grid-4{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:.85rem;
-}
-.grid-3{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:1rem;
-}
+/* ─── GRID ─── */
+.grid-7{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.55rem}
+.grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:.75rem}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.85rem}
 
-/* ============================================================
-   DAY CARD (Plan)
-   ============================================================ */
+/* ─── DAY CARD ─── */
 .day-card{
-  background:#18181b;
-  border:1px solid #27272a;
-  border-radius:10px;
-  padding:.8rem;
+  background:#12121c;border:1px solid #1e1e28;
+  border-radius:10px;padding:.75rem;
   transition:all .25s;
 }
-.day-card:hover{border-color:#3f3f46}
+.day-card:hover{border-color:#2a2a3a}
 .day-card.active{
-  border-color:#3b82f6;
-  box-shadow:0 0 0 1px rgba(59,130,246,.3),0 4px 20px rgba(59,130,246,.08);
+  border-color:#0066ff;
+  box-shadow:0 0 0 1px rgba(0,102,255,.25),0 4px 16px rgba(0,102,255,.08);
 }
 .day-card h3{
-  font-size:.8rem;
-  font-weight:600;
-  color:#ffffff;
-  margin-bottom:.35rem;
+  font-size:.8rem;font-weight:600;color:#ffffff;margin-bottom:.3rem;
+  letter-spacing:-0.01em;
 }
-.day-card .focus{
-  font-size:.68rem;
-  color:#3b82f6;
-  font-weight:500;
-  margin-bottom:.5rem;
-}
-.day-card ul{list-style:none;font-size:.72rem}
-.day-card li{padding:.12rem 0;color:#a1a1aa}
-.day-card li::before{content:'▸ ';color:#3b82f6;opacity:.5}
-.day-card .time{font-size:.6rem;color:#52525b;margin-top:.5rem}
+.day-card .focus{font-size:.67rem;color:#0066ff;font-weight:500;margin-bottom:.45rem}
+.day-card ul{list-style:none;font-size:.71rem}
+.day-card li{padding:.1rem 0;color:#808090}
+.day-card li::before{content:'▸ ';color:#0066ff;opacity:.5}
+.day-card .time{font-size:.6rem;color:#505060;margin-top:.45rem}
 
-/* ============================================================
-   LIBRARY — Book Cards
-   ============================================================ */
+/* ─── BOOK CARD ─── */
 .book-card{
-  background:#18181b;
-  border:1px solid #27272a;
-  border-radius:12px;
-  padding:1rem;
-  cursor:pointer;
-  transition:all .25s;
-  position:relative;
-  display:flex;
-  flex-direction:column;
+  background:#12121c;border:1px solid #1e1e28;
+  border-radius:10px;padding:.9rem;
+  cursor:pointer;transition:all .25s;
+  position:relative;display:flex;flex-direction:column;
 }
 .book-card:hover{
-  border-color:#3b82f6;
-  background:#1a1a24;
+  border-color:#0066ff;background:#141428;
   transform:translateY(-2px);
-  box-shadow:0 8px 24px rgba(0,0,0,.4);
+  box-shadow:0 6px 20px rgba(0,0,0,.5);
 }
-.book-card .title{
-  font-size:.85rem;
-  font-weight:500;
-  color:#f4f4f5;
-  margin-bottom:.2rem;
-  line-height:1.3;
-}
-.book-card .author{
-  font-size:.7rem;
-  color:#71717a;
-  margin-bottom:.5rem;
-}
+.book-card .title{font-size:.82rem;font-weight:600;color:#e8e8ef;margin-bottom:.15rem;line-height:1.3}
+.book-card .author{font-size:.68rem;color:#606070;margin-bottom:.45rem}
 .book-card .cat-tag{
-  display:inline-block;
-  font-size:.6rem;
-  font-weight:500;
-  padding:2px 8px;
-  border-radius:4px;
-  color:#a1a1aa;
-  background:#27272a;
-  text-transform:uppercase;
-  letter-spacing:0.03em;
-  align-self:flex-start;
-  margin-top:auto;
+  display:inline-block;font-size:.58rem;font-weight:500;padding:2px 7px;
+  border-radius:4px;color:#808090;background:#1a1a28;
+  text-transform:uppercase;letter-spacing:0.03em;
+  align-self:flex-start;margin-top:auto;
 }
 .book-card .pdf-icon{
-  position:absolute;
-  top:.7rem;
-  right:.7rem;
-  font-size:.6rem;
-  font-weight:600;
-  color:#52525b;
-  background:#27272a;
-  padding:2px 6px;
-  border-radius:4px;
-  transition:color .2s;
+  position:absolute;top:.6rem;right:.6rem;
+  font-size:.55rem;font-weight:600;color:#505060;
+  background:#1a1a28;padding:2px 6px;border-radius:4px;transition:color .2s;
 }
-.book-card:hover .pdf-icon{color:#3b82f6}
-.book-card:has(.cat-tag.tech){border-left:3px solid #3b82f6}
-.book-card:has(.cat-tag.groove){border-left:3px solid #f43f5e}
-.book-card:has(.cat-tag.jazz){border-left:3px solid #eab308}
-.book-card:has(.cat-tag.latin){border-left:3px solid #06b6d4}
-.book-card:has(.cat-tag.solo){border-left:3px solid #d946ef}
-.book-card:has(.cat-tag.world){border-left:3px solid #8b5cf6}
+.book-card:hover .pdf-icon{color:#0066ff}
+.book-card:has(.cat-tag.tech){border-left:3px solid #0066ff}
+.book-card:has(.cat-tag.groove){border-left:3px solid #e5495a}
+.book-card:has(.cat-tag.jazz){border-left:3px solid #e0a800}
+.book-card:has(.cat-tag.latin){border-left:3px solid #0891b2}
+.book-card:has(.cat-tag.solo){border-left:3px solid #c026d3}
+.book-card:has(.cat-tag.world){border-left:3px solid #7c3aed}
 
-/* ============================================================
-   WORKOUT — Exercise Items
-   ============================================================ */
-.workout-today .day-header{
-  font-size:1.25rem;
-  font-weight:600;
-  color:#ffffff;
-  letter-spacing:-0.01em;
-  margin-bottom:.35rem;
-}
-.workout-today .focus-area{
-  font-size:.85rem;
-  color:#a1a1aa;
-  margin-bottom:1rem;
-}
+/* ─── WORKOUT ─── */
+.workout-today .day-header{font-size:1.3rem;font-weight:700;color:#ffffff;letter-spacing:-0.01em;margin-bottom:.3rem}
+.workout-today .focus-area{font-size:.82rem;color:#808090;margin-bottom:.9rem}
 .exercise-item{
-  display:flex;
-  align-items:flex-start;
-  gap:.85rem;
-  padding:.85rem 1rem;
-  background:#18181b;
-  border:1px solid #27272a;
-  border-radius:10px;
-  margin-bottom:.55rem;
-  cursor:pointer;
-  transition:all .25s;
+  display:flex;align-items:flex-start;gap:.75rem;
+  padding:.75rem .9rem;background:#12121c;
+  border:1px solid #1e1e28;border-radius:10px;
+  margin-bottom:.5rem;cursor:pointer;transition:all .25s;
 }
-.exercise-item:hover{
-  border-color:#3f3f46;
-  background:#1c1c24;
-}
-.exercise-item.done{
-  opacity:.45;
-  border-color:#27272a;
-}
-.exercise-item.done .ex-title{text-decoration:line-through;color:#52525b}
+.exercise-item:hover{border-color:#2a2a3a;background:#14142a}
+.exercise-item.done{opacity:.4;border-color:#1e1e28}
+.exercise-item.done .ex-title{text-decoration:line-through;color:#505060}
 .exercise-item .check{
-  width:20px;
-  height:20px;
-  border:2px solid #3f3f46;
-  border-radius:6px;
-  flex-shrink:0;
-  margin-top:1px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:.6rem;
-  color:#050505;
-  transition:all .25s;
+  width:20px;height:20px;border:2px solid #2a2a3a;
+  border-radius:6px;flex-shrink:0;margin-top:1px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.6rem;color:#08080c;transition:all .25s;
 }
-.exercise-item:hover .check{border-color:#3b82f6}
-.exercise-item.done .check{
-  background:#3b82f6;
-  border-color:#3b82f6;
-}
+.exercise-item:hover .check{border-color:#0066ff}
+.exercise-item.done .check{background:#0066ff;border-color:#0066ff}
 .exercise-item.done .check::after{content:'\2713';color:#ffffff;font-size:.65rem;font-weight:700}
 .exercise-info{flex:1;min-width:0}
-.exercise-info .ex-title{
-  font-size:.85rem;
-  font-weight:500;
-  color:#e4e4e7;
-}
-.exercise-info .ex-desc{
-  font-size:.72rem;
-  color:#71717a;
-  margin-top:.15rem;
-}
-.exercise-info .ex-book{
-  font-size:.65rem;
-  color:#52525b;
-  margin-top:.12rem;
-}
+.exercise-info .ex-title{font-size:.82rem;font-weight:500;color:#d0d0d8}
+.exercise-info .ex-desc{font-size:.7rem;color:#606070;margin-top:.12rem}
+.exercise-info .ex-book{font-size:.63rem;color:#505060;margin-top:.1rem}
 
-/* ============================================================
-   TIMER & METRONOME
-   ============================================================ */
-.timer-panel{text-align:center;padding:1.5rem 1.25rem}
+/* ─── TIMER ─── */
+.timer-panel{text-align:center;padding:1.4rem 1.25rem}
 .timer-display{
-  font-size:3.2rem;
-  font-weight:300;
-  color:#f4f4f5;
+  font-size:3.5rem;font-weight:700;color:#ffffff;
   font-family:'Inter',system-ui,sans-serif;
-  letter-spacing:0.02em;
-  margin:1rem 0;
+  letter-spacing:0.01em;margin:.8rem 0;
   font-variant-numeric:tabular-nums;
 }
-.timer-controls{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap}
-.timer-presets{
-  display:flex;
-  gap:.35rem;
-  justify-content:center;
-  margin-bottom:1rem;
-  flex-wrap:wrap;
-}
+.timer-controls{display:flex;gap:.55rem;justify-content:center;flex-wrap:wrap}
+.timer-presets{display:flex;gap:.3rem;justify-content:center;margin-bottom:.9rem;flex-wrap:wrap}
 .timer-presets button,.timer-controls button{
-  background:#27272a;
-  border:none;
-  color:#a1a1aa;
-  padding:.45rem 1rem;
+  background:#1e1e28;border:none;
+  color:#808090;padding:.45rem .95rem;
   font-family:'Inter',system-ui,sans-serif;
-  font-size:.75rem;
-  font-weight:500;
-  border-radius:8px;
-  cursor:pointer;
-  transition:all .2s;
+  font-size:.73rem;font-weight:500;
+  border-radius:8px;cursor:pointer;transition:all .2s;
 }
-.timer-presets button:hover,.timer-controls button:hover{
-  background:#3f3f46;
-  color:#f4f4f5;
-}
-.timer-controls button.start-btn{
-  background:#3b82f6;
-  color:#ffffff;
-}
-.timer-controls button.start-btn:hover{
-  background:#2563eb;
-}
+.timer-presets button:hover,.timer-controls button:hover{background:#2a2a3a;color:#f0f0f5}
+.timer-controls button.start-btn{background:#0066ff;color:#ffffff}
+.timer-controls button.start-btn:hover{background:#0052cc}
 
+/* ─── METRONOME ─── */
 .metro-bar{
-  display:flex;
-  align-items:center;
-  gap:.85rem;
-  padding:.85rem 1rem;
-  background:#18181b;
-  border:1px solid #27272a;
-  border-radius:10px;
-  margin-top:1rem;
-  flex-wrap:wrap;
+  display:flex;align-items:center;gap:.75rem;
+  padding:.75rem .9rem;background:#12121c;
+  border:1px solid #1e1e28;border-radius:10px;
+  margin-top:.9rem;flex-wrap:wrap;
 }
-.metro-bar label{
-  font-size:.68rem;
-  font-weight:500;
-  color:#71717a;
-  text-transform:uppercase;
-  letter-spacing:0.04em;
-}
+.metro-bar label{font-size:.66rem;font-weight:500;color:#606070;text-transform:uppercase;letter-spacing:0.04em}
 .metro-bar input[type=range]{
-  width:120px;
-  background:#27272a;
-  height:4px;
-  -webkit-appearance:none;
-  appearance:none;
-  border-radius:2px;
-  outline:none;
+  width:110px;background:#1e1e28;height:4px;
+  -webkit-appearance:none;appearance:none;border-radius:2px;outline:none;
 }
 .metro-bar input[type=range]::-webkit-slider-thumb{
-  -webkit-appearance:none;
-  width:16px;
-  height:16px;
-  background:#3b82f6;
-  border:none;
-  border-radius:50%;
-  cursor:pointer;
-  transition:transform .15s;
+  -webkit-appearance:none;width:16px;height:16px;
+  background:#0066ff;border:none;border-radius:50%;cursor:pointer;transition:transform .15s;
 }
 .metro-bar input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15)}
 .metro-bar input[type=range]::-moz-range-thumb{
-  width:16px;
-  height:16px;
-  background:#3b82f6;
-  border:none;
-  border-radius:50%;
-  cursor:pointer;
+  width:16px;height:16px;background:#0066ff;border:none;border-radius:50%;cursor:pointer;
 }
-.metro-bpm{
-  font-size:1.3rem;
-  font-weight:500;
-  color:#ffffff;
-  font-variant-numeric:tabular-nums;
-  min-width:2.8rem;
-  text-align:center;
-}
+.metro-bpm{font-size:1.3rem;font-weight:600;color:#ffffff;font-variant-numeric:tabular-nums;min-width:2.6rem;text-align:center}
 .metro-btn{
-  background:#27272a;
-  border:none;
-  color:#a1a1aa;
-  padding:.4rem .9rem;
-  font-family:'Inter',system-ui,sans-serif;
-  font-size:.73rem;
-  font-weight:500;
-  border-radius:8px;
-  cursor:pointer;
-  transition:all .2s;
+  background:#1e1e28;border:none;color:#808090;
+  padding:.38rem .85rem;font-family:'Inter',system-ui,sans-serif;
+  font-size:.7rem;font-weight:500;border-radius:8px;cursor:pointer;transition:all .2s;
 }
-.metro-btn:hover{background:#3f3f46;color:#f4f4f5}
-.metro-btn.active{background:#3b82f6;color:#ffffff}
+.metro-btn:hover{background:#2a2a3a;color:#f0f0f5}
+.metro-btn.active{background:#0066ff;color:#ffffff}
 
-/* ============================================================
-   SECTION TOGGLE
-   ============================================================ */
+/* ─── SECTION TOGGLE ─── */
 .section{display:none}
-.section.active{display:block;animation:fadeIn .25s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.section.active{display:block;animation:slideUp .25s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-/* ============================================================
-   STATS
-   ============================================================ */
-.stat-row{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.25rem}
+/* ─── STATS ─── */
+.stat-row{display:flex;gap:.65rem;flex-wrap:wrap;margin-bottom:1.15rem}
 .stat-box{
-  background:#18181b;
-  border:1px solid #27272a;
-  border-radius:12px;
-  padding:1rem 1.25rem;
-  flex:1;
-  min-width:110px;
-  text-align:center;
-  transition:border-color .2s;
+  background:#12121c;border:1px solid #1e1e28;
+  border-radius:10px;padding:.9rem 1.1rem;
+  flex:1;min-width:105px;text-align:center;
 }
-.stat-box:hover{border-color:#3f3f46}
-.stat-box .num{
-  font-size:1.6rem;
-  font-weight:600;
-  color:#f4f4f5;
-  font-variant-numeric:tabular-nums;
-}
-.stat-box .label{
-  font-size:.65rem;
-  font-weight:500;
-  color:#71717a;
-  text-transform:uppercase;
-  letter-spacing:0.05em;
-  margin-top:.25rem;
-}
+.stat-box .num{font-size:1.7rem;font-weight:700;color:#ffffff;font-variant-numeric:tabular-nums;}
+.stat-box .label{font-size:.63rem;font-weight:500;color:#606070;text-transform:uppercase;letter-spacing:0.06em;margin-top:.2rem}
 
-/* ============================================================
-   TODAY HIGHLIGHT
-   ============================================================ */
+/* ─── TODAY HIGHLIGHT ─── */
 .today-highlight{
-  background:linear-gradient(135deg,#0f172a,#1a1a2e);
-  border:1px solid #1e3a5f;
-  border-radius:12px;
-  padding:1.25rem 1.5rem;
-  margin-bottom:1.25rem;
+  background:linear-gradient(135deg,#0c0c20,#12122c);
+  border:1px solid #1a1a40;border-radius:10px;
+  padding:1.2rem 1.4rem;margin-bottom:1.15rem;
 }
-.today-highlight .day{
-  font-size:1.1rem;
-  font-weight:600;
-  color:#ffffff;
-}
-.today-highlight .focus-text{
-  font-size:.8rem;
-  color:#a1a1aa;
-  margin-top:.5rem;
-}
+.today-highlight .day{font-size:1.15rem;font-weight:700;color:#ffffff}
+.today-highlight .focus-text{font-size:.78rem;color:#808090;margin-top:.4rem}
 .today-highlight a{
-  display:inline-block;
-  margin-top:.75rem;
-  font-size:.78rem;
-  font-weight:500;
-  color:#3b82f6;
-  transition:color .2s;
+  display:inline-block;margin-top:.65rem;
+  font-size:.76rem;font-weight:500;color:#0066ff;
 }
-.today-highlight a:hover{color:#60a5fa}
+.today-highlight a:hover{color:#3b82f6}
 
-/* ============================================================
-   FILTER BAR
-   ============================================================ */
-.filter-bar{
-  display:flex;
-  gap:.4rem;
-  margin-bottom:1rem;
-  flex-wrap:wrap;
-}
+/* ─── FILTER BAR ─── */
+.filter-bar{display:flex;gap:.35rem;margin-bottom:.9rem;flex-wrap:wrap}
 .filter-bar button{
-  background:#18181b;
-  border:1px solid #27272a;
-  color:#71717a;
-  padding:.35rem .8rem;
+  background:#12121c;border:1px solid #1e1e28;
+  color:#606070;padding:.32rem .75rem;
   font-family:'Inter',system-ui,sans-serif;
-  font-size:.7rem;
-  font-weight:500;
-  border-radius:8px;
-  cursor:pointer;
-  transition:all .2s;
+  font-size:.68rem;font-weight:500;border-radius:8px;
+  cursor:pointer;transition:all .2s;
 }
-.filter-bar button:hover{
-  color:#e4e4e7;
-  border-color:#3f3f46;
-}
-.filter-bar button.active{
-  color:#ffffff;
-  background:#3b82f6;
-  border-color:#3b82f6;
-}
+.filter-bar button:hover{color:#d0d0d8;border-color:#2a2a3a}
+.filter-bar button.active{color:#ffffff;background:#0066ff;border-color:#0066ff}
 
-/* ============================================================
-   PDF VIEWER — Fullscreen Overlay
-   ============================================================ */
+/* ─── PDF VIEWER ─── */
 .pdf-viewer-overlay{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.92);
-  backdrop-filter:blur(8px);
-  z-index:200;
-  align-items:center;
-  justify-content:center;
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.93);z-index:200;
+  align-items:center;justify-content:center;
 }
 .pdf-viewer-overlay.open{display:flex}
 .pdf-viewer-box{
-  width:95vw;
-  height:95vh;
-  display:flex;
-  flex-direction:column;
-  background:#09090b;
-  border:1px solid #27272a;
-  border-radius:12px;
-  overflow:hidden;
+  width:95vw;height:95vh;display:flex;flex-direction:column;
+  background:#0c0c14;border:1px solid #1e1e28;
+  border-radius:10px;overflow:hidden;
 }
 .pdf-viewer-box .viewer-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:.75rem 1.25rem;
-  border-bottom:1px solid #27272a;
-  background:#18181b;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:.65rem 1.15rem;border-bottom:1px solid #1e1e28;background:#12121c;
 }
-.pdf-viewer-box .viewer-header h3{
-  color:#e4e4e7;
-  font-size:.85rem;
-  font-weight:500;
-}
+.pdf-viewer-box .viewer-header h3{color:#d0d0d8;font-size:.82rem;font-weight:500}
 .pdf-viewer-box .viewer-close{
-  background:#27272a;
-  border:none;
-  color:#a1a1aa;
-  padding:.35rem .8rem;
-  cursor:pointer;
-  font-family:'Inter',system-ui,sans-serif;
-  font-size:.72rem;
-  font-weight:500;
-  border-radius:8px;
-  transition:all .2s;
+  background:#1e1e28;border:none;color:#808090;
+  padding:.35rem .75rem;cursor:pointer;font-family:'Inter',system-ui,sans-serif;
+  font-size:.7rem;font-weight:500;border-radius:8px;transition:all .2s;
 }
-.pdf-viewer-box .viewer-close:hover{
-  background:#450a0a;
-  color:#f87171;
-}
-.pdf-viewer-box iframe,.pdf-viewer-box object{
-  flex:1;
-  border:none;
-  width:100%;
-  height:100%;
-}
+.pdf-viewer-box .viewer-close:hover{background:#450a0a;color:#f87171}
+.pdf-viewer-box iframe,.pdf-viewer-box object{flex:1;border:none;width:100%;height:100%}
 
-/* ============================================================
-   PROGRESS BAR
-   ============================================================ */
-.progress-bar{height:4px;background:#27272a;border-radius:2px;margin:.6rem 0;overflow:hidden}
-.progress-bar .fill{height:100%;background:#3b82f6;border-radius:2px;transition:width .4s ease;width:0%}
+/* ─── PROGRESS BAR ─── */
+.progress-bar{height:4px;background:#1e1e28;border-radius:2px;margin:.5rem 0;overflow:hidden}
+.progress-bar .fill{height:100%;background:#0066ff;border-radius:2px;transition:width .4s ease;width:0%}
 
-/* ============================================================
-   MISC / UTILITY
-   ============================================================ */
+/* ─── UTILITY ─── */
 .mt-1{margin-top:1rem}
 .mb-1{margin-bottom:1rem}
 .text-center{text-align:center}
-.text-muted{color:#71717a;font-size:.73rem}
+.text-muted{color:#606070;font-size:.72rem}
 .flex-between{display:flex;justify-content:space-between;align-items:center}
 .tag{
-  display:inline-block;
-  font-size:.6rem;
-  font-weight:500;
-  padding:2px 8px;
-  border-radius:4px;
-  color:#a1a1aa;
-  background:#27272a;
-  text-transform:uppercase;
-  letter-spacing:0.03em;
+  display:inline-block;font-size:.58rem;font-weight:500;
+  padding:2px 7px;border-radius:4px;color:#808090;background:#1a1a28;
+  text-transform:uppercase;letter-spacing:0.03em;
 }
 
-/* ============================================================
-   SCROLLBAR
-   ============================================================ */
-::-webkit-scrollbar{width:6px}
-::-webkit-scrollbar-track{background:#050505}
-::-webkit-scrollbar-thumb{background:#27272a;border-radius:3px}
-::-webkit-scrollbar-thumb:hover{background:#3f3f46}
+/* ─── OVERRIDES for JS inline styles ─── */
+/* plan view inline colors */
+.day-card [style*="color:#555"]{color:#606070 !important}
+.day-card [style*="color:#00ff41"]{color:#0066ff !important}
+.day-card [style*="border:1px solid #00ff41"]{border-color:#0066ff !important;background:#0066ff !important}
+.day-card [style*="background:transparent"]{background:transparent !important}
+#workout-container [style*="color:#555"]{color:#606070 !important}
+/* checkbox in plan overrides */
+.day-card [style*="font-size:.5rem"]{font-size:.55rem !important;line-height:1 !important}
 
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:#08080c}
+::-webkit-scrollbar-thumb{background:#1e1e28;border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:#2a2a3a}
+
+/* ─── RESPONSIVE ─── */
 @media(max-width:640px){
   nav .container{flex-direction:column;align-items:stretch}
-  .nav-links{justify-content:stretch;border-radius:8px}
   .nav-links a{flex:1;text-align:center;font-size:.7rem;padding:.35rem .5rem}
   h1{font-size:1.3rem}
-  .grid-7{grid-template-columns:repeat(auto-fit,minmax(100px,1fr))}
+  .grid-7{grid-template-columns:repeat(auto-fit,minmax(95px,1fr))}
   .grid-4{grid-template-columns:1fr}
-  .timer-display{font-size:2.2rem}
+  .timer-display{font-size:2.4rem}
   .stat-row{flex-direction:column}
   .container{padding:.85rem 1rem}
   .pdf-viewer-box{width:100vw;height:100vh;border-radius:0}
@@ -626,10 +322,9 @@ nav .container{
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <div class="container">
-    <span class="nav-brand">Drum Trainer</span>
+    <span class="nav-brand">Drum <span>Trainer</span></span>
     <div class="nav-links">
       <a href="#" data-section="home" class="active">Home</a>
       <a href="#" data-section="plan">Plan</a>
@@ -644,53 +339,53 @@ nav .container{
 <!-- ==================== HOME ==================== -->
 <section id="section-home" class="section active">
   <h1>Drum Trainer</h1>
-  <p class="text-muted mb-1">Trainingsplan &amp; Bibliothek — v1.0</p>
+  <p class="text-muted mb-1">Trainingsplan & Bibliothek  &mdash; v1.0</p>
 
   <div id="today-highlight" class="today-highlight"></div>
 
-  <h2>Wochen&uuml;bersicht</h2>
+  <h2>Wochenübersicht</h2>
   <div class="grid-7" id="week-grid">
-    <div class="day-card" data-day="1"><h3>MO</h3><div class="focus">Rudiments &amp; Stick Control</div></div>
-    <div class="day-card" data-day="2"><h3>DI</h3><div class="focus">Grooves &amp; Funk</div></div>
+    <div class="day-card" data-day="1"><h3>MO</h3><div class="focus">Rudiments & Stick Control</div></div>
+    <div class="day-card" data-day="2"><h3>DI</h3><div class="focus">Grooves & Funk</div></div>
     <div class="day-card" data-day="3"><h3>MI</h3><div class="focus">Coordination</div></div>
-    <div class="day-card" data-day="4"><h3>DO</h3><div class="focus">Jazz &amp; Bop</div></div>
+    <div class="day-card" data-day="4"><h3>DO</h3><div class="focus">Jazz & Bop</div></div>
     <div class="day-card" data-day="5"><h3>FR</h3><div class="focus">World Rhythms</div></div>
-    <div class="day-card" data-day="6"><h3>SA</h3><div class="focus">Solos &amp; Application</div></div>
-    <div class="day-card" data-day="0"><h3>SO</h3><div class="focus">Technique &amp; Review</div></div>
+    <div class="day-card" data-day="6"><h3>SA</h3><div class="focus">Solos & Application</div></div>
+    <div class="day-card" data-day="0"><h3>SO</h3><div class="focus">Technique & Review</div></div>
   </div>
 
   <h2 class="mt-1">Statistiken</h2>
   <div class="stat-row">
-    <div class="stat-box"><div class="num" id="stat-books">23</div><div class="label">B&uuml;cher</div></div>
+    <div class="stat-box"><div class="num" id="stat-books">23</div><div class="label">Bücher</div></div>
     <div class="stat-box"><div class="num" id="stat-today-done">0</div><div class="label">Heute erledigt</div></div>
     <div class="stat-box"><div class="num">7</div><div class="label">Trainingstage</div></div>
-    <div class="stat-box"><div class="num">35+</div><div class="label">&Uuml;bungen/Woche</div></div>
+    <div class="stat-box"><div class="num">35+</div><div class="label">Übungen/Woche</div></div>
   </div>
 </section>
 
 <!-- ==================== PLAN ==================== -->
 <section id="section-plan" class="section">
-  <h1>TRAININGSPLAN</h1>
+  <h1>Trainingsplan</h1>
   <p class="text-muted mb-1">Feste Wochenstruktur — jeden Tag ein anderer Fokus</p>
 
   <div id="plan-container"></div>
 
   <div class="card mt-1">
     <div class="card-header">Hinweise</div>
-    <ul style="list-style:none;font-size:.78rem;color:#a1a1aa">
-      <li style="padding:.25rem 0">• Jede Session 45-90 Minuten einplanen</li>
-      <li style="padding:.25rem 0">• Mit Warmup beginnen (5-10 min rudiments an der Snare)</li>
-      <li style="padding:.25rem 0">• Metronom verwenden — starte langsam, steigere BPM</li>
-      <li style="padding:.25rem 0">• PDFs in der Library &ouml;ffnen und mitlaufen lassen</li>
-      <li style="padding:.25rem 0">• Sonntag = leichter Tag: Review, Schwachstellen, freies Spiel</li>
+    <ul style="list-style:none;font-size:.76rem;color:#808090">
+      <li style="padding:.2rem 0">&bull; Jede Session 45-90 Minuten einplanen</li>
+      <li style="padding:.2rem 0">&bull; Mit Warmup beginnen (5-10 min rudiments an der Snare)</li>
+      <li style="padding:.2rem 0">&bull; Metronom verwenden &mdash; starte langsam, steigere BPM</li>
+      <li style="padding:.2rem 0">&bull; PDFs in der Library öffnen und mitlaufen lassen</li>
+      <li style="padding:.2rem 0">&bull; Sonntag = leichter Tag: Review, Schwachstellen, freies Spiel</li>
     </ul>
   </div>
 </section>
 
 <!-- ==================== LIBRARY ==================== -->
 <section id="section-library" class="section">
-  <h1>BIBLIOTHEK</h1>
-  <p class="text-muted mb-1">Alle Drum-B&uuml;cher — klicke zum &Ouml;ffnen</p>
+  <h1>Bibliothek</h1>
+  <p class="text-muted mb-1">Alle Drum-Bücher &mdash; klicke zum Öffnen</p>
 
   <div class="filter-bar" id="filter-bar">
     <button class="active" data-filter="all">Alle</button>
@@ -701,14 +396,13 @@ nav .container{
 
 <!-- ==================== WORKOUT ==================== -->
 <section id="section-workout" class="section">
-  <h1>HEUTIGES WORKOUT</h1>
+  <h1>Heutiges Workout</h1>
   <p class="text-muted mb-1">Automatisch basierend auf dem Wochentag</p>
 
   <div id="workout-container"></div>
 
-  <!-- TIMER & METRONOME -->
   <div class="card timer-panel mt-1">
-    <div class="card-header">Timer &amp; Metronom</div>
+    <div class="card-header">Timer & Metronom</div>
 
     <div class="timer-presets">
       <button data-min="5">5 min</button>
@@ -737,12 +431,11 @@ nav .container{
 
 </div><!-- /container -->
 
-<!-- ==================== PDF VIEWER ==================== -->
 <div class="pdf-viewer-overlay" id="pdf-viewer">
   <div class="pdf-viewer-box">
     <div class="viewer-header">
       <h3 id="pdf-title">PDF</h3>
-      <button class="viewer-close" id="pdf-close">SCHLIESSEN</button>
+      <button class="viewer-close" id="pdf-close">Schliessen</button>
     </div>
     <iframe id="pdf-frame" src=""></iframe>
   </div>
